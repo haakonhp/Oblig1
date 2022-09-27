@@ -1,0 +1,115 @@
+@startuml
+
+'Visuelle parametere og definisjon av Actors med variabler
+actor :Bruker: as u
+skinparam actorStyle awesome
+actor :Administrator: as a
+
+
+
+package Konto {
+'Konto usecases med variabler som starter på stor K.***:
+usecase (Opprette Konto) as K.join
+usecase (Avslutte Konto) as K.quit
+usecase (Kjøpe Abonnement) as K.buy
+usecase (Si Opp Abonnement) as K.cancel
+usecase (Se kvitteringer for kjøp) as K.receipt
+usecase (Glemt Passord) as K.forgot
+usecase (Endre Passord) as K.change
+u -up-> K.change
+u -up-> K.forgot
+u -up-> K.receipt
+u -up-> K.cancel
+u -up-> K.buy
+u -up-> K.quit
+u -up-> K.join
+}
+
+package Media {
+'Media usecases med variabler som starter på stor M.***:
+usecase (Se Media) as M.play
+usecase (Logge på) as M.login
+usecase (Logge av) as M.logout
+usecase (Fortsette å se fra der en sist stoppet) as M.continue
+usecase (Legge Media til favoritter) as M.star
+usecase (Anbefale media til andre) as M.share
+usecase (Søke etter Media) as M.search
+u --> M.logout
+u --> M.login
+u --> M.play
+u --> M.continue
+u --> M.star
+u --> M.share
+u --> M.search
+}
+
+package Profile {
+'Profil usecases med variabler som starter på stor P.***:
+usecase (Endre Tekst instillinger) as P.txt
+usecase (Endre Språk) as P.lang
+usecase (Endre Profil Navn) as P.name
+usecase (Opprette ny Profil) as P.new
+usecase (Slette Profil) as P.delete
+u -up-> P.txt
+u -up-> P.lang
+u -up-> P.name
+u -up-> P.new
+u -up-> P.delete
+}
+
+package Database {
+'Database usecases med variabler som starter på stor D.***:
+usecase (Sette pris på Abonnement) as D.price
+usecase (Brukerkontoer) as D.account
+usecase (Abonnement Dato Fra-Til) as D.Ksub
+usecase (Media Viewtime/Sett) as D.Mstatus
+usecase (Legge til Media) as D.Madd
+usecase (Fjerne Media) as D.Mrem
+usecase (Endre Media) as D.Medit
+usecase (Statestikk Media) as D.Mstat
+usecase (Profil) as D.profil
+a -up-> D.account
+a -up-> D.price
+a -up-> D.Ksub
+a -up-> D.Mstatus
+a -up-> D.Madd
+a -up-> D.Mrem
+a -up-> D.Medit
+a -up-> D.Mstat
+a -up-> D.profil
+}
+
+'Mellom pakker relasjoner
+P.new .down.> D.profil
+P.delete .down.> D.profil
+P.lang .down.> D.profil
+P.name .down.> D.profil
+P.txt .down.> D.profil
+
+M.continue <.up. D.profil
+M.continue -down-> D.Mstatus
+M.login .down.> D.account
+M.logout .down.> D.account
+M.star .down.> D.profil
+
+K.change .down.> D.account
+K.forgot .down.> D.account
+K.join .down.> D.account
+K.buy .down.> D.account
+K.cancel .down.> D.account
+K.quit .down.> D.account
+
+D.price .up.> K.join
+D.price .up.> K.buy
+D.price .up.> K.receipt
+
+D.Madd -up-> M.search
+D.Mrem -up-> M.search
+D.Medit -up-> M.search
+D.Madd -up-> M.play
+D.Mrem -up-> M.play
+D.Medit -up-> M.play
+D.Mstat <.down. M.play
+
+
+@enduml

@@ -1,0 +1,33 @@
+@startuml
+	participant Bruker #blue
+
+
+	box Brukerkonto Database
+		participant Konto as k #red
+		participant Abonnent as a #red
+	end box
+
+	 participant ekstern_betalings_lev as nets #green
+
+	box Kredittkort Leverandør
+		participant Saldo as Ks #yellow
+		participant Kredit as KK #yellow
+	end box
+
+
+
+	Bruker -[#blue]> k : opprette_konto
+	k -[#blue]> a : abonnere
+	a -[#red]> nets : betale
+	nets -[#green]> Ks : sjekke_dekkning
+	Ks --[#yellow]> nets : ingen_dekkning
+	nets --[#green]> a : ingen_dekkning
+	nets --[#green]> Bruker : ingen_dekkning
+	Ks -[#yellow]> KK : betalt
+	KK -[#yellow]> tjenestens_bank : sende_penger
+	KK -[#yellow]> nets : betalt_ok
+	nets -[#green]> a : betalt_ok
+    a -[#red]> k : aktivere_abonnement_på_konto
+    k -[#red]> Bruker : melding_bruker_abonnent_aktivert
+
+@enduml
